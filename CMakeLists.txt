@@ -11,6 +11,8 @@ project(AEC3 C CXX)
 if(APPLE)
     set(CMAKE_OSX_DEPLOYMENT_TARGET "10.7")
     set(CMAKE_CXX_FLAGS "-stdlib=libc++")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "com.synervoz.aec3")
+    set(CMAKE_XCODE_ATTRIBUTE_DEVELOPMENT_TEAM "NQ2VLM7NM7")
 endif()
 
 ################################################################################
