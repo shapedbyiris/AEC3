@@ -156,7 +156,9 @@ void ScaledComfortNoiseGenerator::Compute(
     // Limit the noise to a floor matching a WGN input of -96 dBFS.
     // NOTE: This means that the noise shall be *no less* than -96 dBFS, there is no limit on maximum
     constexpr float kNoiseFloor = 17.1267f; //dBu???
-    constexpr float kNoiseCeiling = 10.0f;
+      
+    //TODO: This code does not accomplish the intended goal, there is no advantage over FCNG currently.
+    constexpr float kNoiseCeiling = 4.0f;
 
     for (size_t ch = 0; ch < num_capture_channels_; ++ch) {
       for (auto& n : N2_[ch]) {
