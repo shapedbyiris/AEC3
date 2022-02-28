@@ -23,7 +23,6 @@
 #include "audio_processing/aec3/aec_state.h"
 #include "audio_processing/aec3/comfort_noise_generator.h"
 #include "audio_processing/aec3/false_comfort_noise_generator.h"
-#include "audio_processing/aec3/scaled_comfort_noise_generator.h"
 #include "audio_processing/aec3/echo_path_variability.h"
 #include "audio_processing/aec3/echo_remover_metrics.h"
 #include "audio_processing/aec3/fft_data.h"
@@ -154,7 +153,6 @@ class EchoRemoverImpl final : public EchoRemover {
   SuppressionGain suppression_gain_;
   //ComfortNoiseGenerator cng_;
   FalseComfortNoiseGenerator cng_;
-  //ScaledComfortNoiseGenerator cng_;
   SuppressionFilter suppression_filter_;
   RenderSignalAnalyzer render_signal_analyzer_;
   ResidualEchoEstimator residual_echo_estimator_;
