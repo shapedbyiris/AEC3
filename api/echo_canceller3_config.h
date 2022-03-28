@@ -88,7 +88,7 @@ struct RTC_EXPORT EchoCanceller3Config {
     bool conservative_initial_phase = false;
     bool enable_shadow_filter_output_usage = true;
     bool use_linear_filter = true;
-    bool export_linear_aec_output = false;
+    bool export_linear_aec_output = true;
   } filter;
 
   struct Erle {
