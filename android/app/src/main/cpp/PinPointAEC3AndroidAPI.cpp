@@ -5,6 +5,7 @@
 //
 
 #include "PinPointAEC3AndroidAPI.h"
+#include "PinPointAEC3MVM.h"
 
 #define WEBRTC_POSIX 1
 
@@ -79,6 +80,32 @@ public:
         linearBuffer->CopyTo(linearStreamConfig, stackedLinearBuffer);
     }
 
+    void processCapture(float* audioBuffer, float* linearAudioBuffer, int numberOfFrames, bool enableMVM) {
+        if (numberOfFrames != sampleRate / 100) {
+            throw std::invalid_argument("numberOfFrames should be sampleRate / 100");
+        }
+        float* stackedBuffer[1] = {audioBuffer};
+        float* stackedLinearBuffer[1] = {linearAudioBuffer};
+        aecBuffer->CopyFrom(stackedBuffer, streamConfig);
+        aec->AnalyzeCapture(aecBuffer.get());
+        if (sampleRateSupportsMultiBand()) {
+            aecBuffer->SplitIntoFrequencyBands();
+        }
+        highPassFilter->Process(aecBuffer.get(), sampleRateSupportsMultiBand());
+        aec->SetAudioBufferDelay(0);
+        aec->ProcessCapture(aecBuffer.get(), linearBuffer.get(), false);
+        if (sampleRateSupportsMultiBand()) {
+            aecBuffer->MergeFrequencyBands();
+        }
+        aecBuffer->CopyTo(streamConfig, stackedBuffer);
+        linearBuffer->CopyTo(linearStreamConfig, stackedLinearBuffer);
+        if (enableMVM)
+        {
+            mvm->combineAecLinearNonlinear (stackedBuffer[0], stackedLinearBuffer[0], numberOfFrames);
+            aecBuffer->CopyFrom(stackedBuffer, streamConfig);
+        }
+    }
+
     void analyzeRender(float* audioBuffer, int numberOfFrames) {
         if (numberOfFrames != sampleRate / 100) {
             throw std::invalid_argument("numberOfFrames should be sampleRate / 100");
@@ -104,6 +131,7 @@ private:
     const int kLinearOutputRateHz = 16000;
     std::unique_ptr<webrtc::AudioBuffer> linearBuffer;
     std::unique_ptr<webrtc::HighPassFilter> highPassFilter;
+    std::unique_ptr<PinPointAEC3MVM> mvm;
 
     bool sampleRateSupportsMultiBand() {
         return sampleRate == 32000 || sampleRate == 48000;
@@ -128,6 +156,11 @@ void PinPointAEC3ProcessCapture(void* object, float* audioBuffer, int numberOfFr
 void PinPointAEC3ProcessCaptureLinear(void* object, float* audioBuffer, float* linearBuffer, int numberOfFrames) {
     PinPointAEC3 *aec = (PinPointAEC3*)object;
     aec->processCapture(audioBuffer, linearBuffer, numberOfFrames);
+}
+
+void PinPointAEC3ProcessCaptureMVM(void* object, float* audioBuffer, float* linearBuffer, int numberOfFrames) {
+    PinPointAEC3 *aec = (PinPointAEC3*)object;
+    aec->processCapture(audioBuffer, linearBuffer, numberOfFrames, true);
 }
 
 void PinPointAEC3AnalyzeRender(void* object, float* audioBuffer, int numberOfFrames) {
