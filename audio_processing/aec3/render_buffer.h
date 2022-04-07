@@ -105,7 +105,9 @@ class RenderBuffer {
   const SpectrumBuffer* const spectrum_buffer_;
   const FftBuffer* const fft_buffer_;
   bool render_activity_ = false;
-  RTC_DISALLOW_IMPLICIT_CONSTRUCTORS(RenderBuffer);
+  RenderBuffer() = delete;
+  RenderBuffer(const RenderBuffer&) = delete;
+  RenderBuffer& operator=(const RenderBuffer&) = delete;
 };
 
 }  // namespace webrtc

@@ -276,7 +276,9 @@ class ApmDataDumper {
   FILE* GetRawFile(const char* name);
   WavWriter* GetWavFile(const char* name, int sample_rate_hz, int num_channels);
 #endif
-  RTC_DISALLOW_IMPLICIT_CONSTRUCTORS(ApmDataDumper);
+  ApmDataDumper() = delete;
+  ApmDataDumper(const ApmDataDumper&) = delete;
+  ApmDataDumper& operator=(const ApmDataDumper&) = delete;
 };
 
 }  // namespace webrtc
