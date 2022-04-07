@@ -16,6 +16,7 @@ __attribute__(( visibility("default") ))  void* PinPointAEC3Create(int sampleRat
 __attribute__(( visibility("default") ))  void PinPointAEC3Destroy(void *object);
 __attribute__(( visibility("default") ))  void PinPointAEC3ProcessCapture(void* object, float* audioBuffer, int numberOfFrames);
 __attribute__(( visibility("default") ))  void PinPointAEC3ProcessCaptureLinear(void* object, float* audioBuffer, float* linearBuffer, int numberOfFrames);
+__attribute__((visibility("default"))) void PinPointAEC3ProcessCaptureMVM(void* object, float* audioBuffer, float* linearAudioBuffer, int numberOfFrames);
 __attribute__(( visibility("default") ))  void PinPointAEC3AnalyzeRender(void* object, float* audioBuffer, int numberOfFrames);
 
 #ifdef __cplusplus
