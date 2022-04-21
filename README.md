@@ -15,8 +15,8 @@ Use android subfolder for the time being
 ## iOS
 Use iOS generator script
 
-## Linux
-https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing
+## Linux / macOS alternative / Windows alternative (windows branch)
+https://gitlab.freedesktop.org/kcoul/webrtc-audio-processing
 
 ## test
 see demo.cc
