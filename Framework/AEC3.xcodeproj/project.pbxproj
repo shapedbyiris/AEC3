@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		830400A9281817B20071D503 /* AEC3.h in Headers */ = {isa = PBXBuildFile; fileRef = 830400A8281817B20071D503 /* AEC3.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		830400B22818182A0071D503 /* audio_processing.h in Headers */ = {isa = PBXBuildFile; fileRef = 830400B12818182A0071D503 /* audio_processing.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		83665D932818592100029464 /* libAEC3.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83665D922818592100029464 /* libAEC3.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		830400A5281817B20071D503 /* AEC3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AEC3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		830400A8281817B20071D503 /* AEC3.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AEC3.h; sourceTree = "<group>"; };
 		830400B12818182A0071D503 /* audio_processing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = audio_processing.h; path = ../audio_processing/include/audio_processing.h; sourceTree = "<group>"; };
+		83665D922818592100029464 /* libAEC3.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libAEC3.a; path = ../output/Darwin/Debug_x64/libAEC3.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -22,6 +24,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83665D932818592100029464 /* libAEC3.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,6 +60,7 @@
 		830400B3281818530071D503 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				83665D922818592100029464 /* libAEC3.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
