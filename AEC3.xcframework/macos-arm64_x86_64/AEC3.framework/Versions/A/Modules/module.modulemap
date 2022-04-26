@@ -1,0 +1,6 @@
+framework module AEC3 {
+  umbrella header "AEC3.h"
+
+  export *
+  module * { export * }
+}
