@@ -61,6 +61,7 @@ output/
 
 iOS/
 macOS/
+macos-products
 #iOS/AEC3.build
 #iOS/CMake*
 #macOS/AEC3.build
