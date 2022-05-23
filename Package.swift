@@ -13,15 +13,15 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "api",
-            path: "../macos-products/api.xcframework"
+            path: "macos-products/api.xcframework"
         ),
         .binaryTarget(
             name: "AEC3",
-            path: "../macos-products/AEC3.xcframework"
+            path: "macos-products/AEC3.xcframework"
         ),
         .binaryTarget(
             name: "base",
-            path: "../macos-products/base.xcframework"
+            path: "macos-products/base.xcframework"
         )
     ]
 )
