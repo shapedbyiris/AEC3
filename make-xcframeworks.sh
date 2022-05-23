@@ -1,7 +1,4 @@
-rm -rf macos-products/headers || true
-rm -rf macos-products/base.xcframework || true
-rm -rf macos-products/api.xcframework || true
-rm -rf macos-products/AEC3.xcframework || true
+rm -rf macos-products || true
 
 sh generate-macos-project.sh
 
