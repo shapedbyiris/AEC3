@@ -10,7 +10,7 @@ xcodebuild build \
     CODE_SIGN_IDENTITY=${DEVELOPERID_CERTIFICATE_NAME} \
     | xcpretty
 
-mkdir ./macos-products/headers
+mkdir -p ./macos-products/headers
 rsync -avhm --include='api' --include='*.h' --exclude='*' ./ ./macos-products/headers/api/
 rsync -avhm --include='*/' --include='*.h' --exclude='*' ./base/rtc_base ./macos-products/headers/api/
 rsync -avhm --include='*/' --include='*.h' --exclude='*' ./base/abseil/absl ./macos-products/headers/api/
