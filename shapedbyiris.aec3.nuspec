@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>shapedbyiris.aec3</id>
+    <version>$version$</version>
+    <description>AEC3 Extracted From WebRTC</description>
+    <authors>WebRTC</authors>
+    <projectUrl>https://github.com/shapedbyiris/AEC3</projectUrl>
+    <license type="expression">BSD-3-Clause</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>native log eac3 audio c++ cpp</tags>
+    <repository type="git" url="https://github.com/shapedbyiris/AEC3" />
+    <dependencies>
+      <group targetFramework="native0.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="**/*.h" exclude="android/**;demo/**" target="/lib/native/include" />
+    <file src="output/Windows/Release_x64/AEC3.lib" target="/lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/AEC3.pdb" target="/lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/api.lib"  target="/lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/api.pdb"  target="/lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/base.lib" target="/lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/base.pdb" target="/lib/native/x64-Release" />
+    <file src="output/Windows/Debug_x64/AEC3.lib"   target="/lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/AEC3.pdb"   target="/lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/api.lib"    target="/lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/api.pdb"    target="/lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/base.lib"   target="/lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/base.pdb"   target="/lib/native/x64-Debug" />
+    <file src="shapedbyiris.aec3.props"             target="/build/native" />
+  </files>
+</package>

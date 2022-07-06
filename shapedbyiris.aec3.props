@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)../../lib/native/include;$(MSBuildThisFileDirectory)../../lib/native/include/base;$(MSBuildThisFileDirectory)../../lib/native/include/base/abseil;$(MSBuildThisFileDirectory)../../lib/native/include/base/jsoncpp;$(MSBuildThisFileDirectory)../../lib/native/include/base/jsoncpp/include;$(MSBuildThisFileDirectory)../../lib/native/include/base/audio_processing;$(MSBuildThisFileDirectory)../../lib/native/include/base/audio_processing/aec3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WEBRTC_WIN;NOMINMAX;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>$(MSBuildThisFileDirectory)../../lib/native/$(Platform)-$(Configuration)/AEC3.lib;$(MSBuildThisFileDirectory)../../lib/native/$(Platform)-$(Configuration)/base.lib;$(MSBuildThisFileDirectory)../../lib/native/$(Platform)-$(Configuration)/api.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>
