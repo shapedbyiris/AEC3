@@ -1,0 +1,33 @@
+name: windows
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: windows-2019
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: Configure CMake
+      run: cmake -B build -G "Visual Studio 16 2019" -A x64
+
+    - name: Build release configuration
+      run: cmake --build build --config Release
+      
+    - name: Build debug configuration
+      run: cmake --build build --config Debug
+  
+    - name: Pack NuGet
+      run: nuget pack shapedbyiris.aec3.nuspec -p version=$((Get-Date).tostring("yyyy.MMdd.HHmm"))
+      
+    - name: Publish
+      if: github.event_name != 'pull_request'
+      run: nuget push *.nupkg -Source "https://nuget.pkg.github.com/shapedbyiris/index.json" -SkipDuplicate -ApiKey "${{secrets.GITHUB_TOKEN}}"
