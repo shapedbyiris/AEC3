@@ -19,15 +19,17 @@ jobs:
     - name: Configure CMake
       run: cmake -B build -G "Visual Studio 16 2019" -A x64
 
-    - name: Build release configuration
+    - name: Build Release
       run: cmake --build build --config Release
-      
-    - name: Build debug configuration
+
+    - name: Build Debug
       run: cmake --build build --config Debug
-  
+
     - name: Pack NuGet
       run: nuget pack shapedbyiris.aec3.nuspec -p version=$((Get-Date).tostring("yyyy.MMdd.HHmm"))
-      
-    - name: Publish
+
+    - name: Publish NuGet
       if: github.event_name != 'pull_request'
-      run: nuget push *.nupkg -Source "https://nuget.pkg.github.com/shapedbyiris/index.json" -SkipDuplicate -ApiKey "${{secrets.GITHUB_TOKEN}}"
+      run: |
+        nuget sources Add -Name github -Source https://nuget.pkg.github.com/${{github.repository_owner}}/index.json -Username ${{github.repository_owner}} -Password ${{github.token}}
+        nuget push *.nupkg -Source github -SkipDuplicate -ApiKey ${{github.token}}
