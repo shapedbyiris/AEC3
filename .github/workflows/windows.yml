@@ -17,7 +17,7 @@ jobs:
         fetch-depth: 0
 
     - name: Configure CMake
-      run: cmake -B build -G "Visual Studio 17 2022" -A x64 -T version=14.37
+      run: cmake -B build -G "Visual Studio 17 2022" -A x64 -DCMAKE_CXX_COMPILER="C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.37.32822/bin/Hostx64/x64/cl.exe"
 
     - name: Build Release
       run: cmake --build build --config Release
