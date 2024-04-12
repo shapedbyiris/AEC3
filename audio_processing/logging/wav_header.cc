@@ -54,6 +54,7 @@ const uint32_t kFmtSubchunkSize = sizeof(FmtSubchunk) - sizeof(ChunkHeader);
 // Simple wav header. It does not include chunks that are not essential to read
 // audio samples.
 struct WavHeader {
+  WavHeader() {};
   WavHeader(const WavHeader&) = default;
   WavHeader& operator=(const WavHeader&) = default;
   RiffHeader riff;
@@ -239,7 +240,8 @@ bool ReadWavHeader(ReadableWav* readable,
                    WavFormat* format,
                    size_t* bytes_per_sample,
                    size_t* num_samples) {
-  auto header = rtc::MsanUninitialized<WavHeader>({});
+  WavHeader tmp;
+  auto header = rtc::MsanUninitialized<WavHeader>(tmp);
 
   // Read RIFF chunk.
   if (readable->Read(&header.riff, sizeof(header.riff)) != sizeof(header.riff))
