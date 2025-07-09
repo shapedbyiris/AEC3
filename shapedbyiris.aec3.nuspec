@@ -8,7 +8,7 @@
     <projectUrl>https://github.com/shapedbyiris/AEC3</projectUrl>
     <license type="expression">BSD-3-Clause</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>native log eac3 audio c++ cpp</tags>
+    <tags>native, log, eac3, audio, c++, cpp</tags>
     <repository type="git" url="https://github.com/shapedbyiris/AEC3" />
     <dependencies>
       <group targetFramework="native0.0" />
