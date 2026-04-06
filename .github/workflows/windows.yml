@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v2
@@ -32,26 +34,22 @@ jobs:
       - name: Build
         run: cmake --build build/${{ matrix.arch }} --config ${{ matrix.config }}
 
-      - name: Stage package files
+      - name: Verify outputs
         shell: pwsh
         run: |
-          $binDir = "build/${{ matrix.arch }}/${{ matrix.config }}"
-          $outDir = "artifacts/${{ matrix.arch }}-${{ matrix.config }}"
+          $binDir = "output/Windows/${{ matrix.config }}_${{ matrix.arch }}"
+          if (!(Test-Path $binDir))
+          {
+              throw "Expected output folder not found: $binDir"
+          }
 
-          New-Item -ItemType Directory -Force $outDir | Out-Null
-
-          Copy-Item "$binDir/AEC3.lib" $outDir -ErrorAction Stop
-          Copy-Item "$binDir/base.lib" $outDir -ErrorAction Stop
-          Copy-Item "$binDir/api.lib"  $outDir -ErrorAction Stop
-
-          Get-ChildItem $binDir -Filter *.pdb -ErrorAction SilentlyContinue |
-            Copy-Item -Destination $outDir -Force
+          Get-ChildItem $binDir
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.arch }}-${{ matrix.config }}
-          path: artifacts/${{ matrix.arch }}-${{ matrix.config }}
+          path: output/Windows/${{ matrix.config }}_${{ matrix.arch }}
 
   pack:
     needs: build
@@ -66,18 +64,23 @@ jobs:
         with:
           path: downloaded
 
-      - name: Assemble NuGet payload
+      - name: Reassemble output tree
         shell: pwsh
         run: |
-          New-Item -ItemType Directory -Force output/Windows/x64-Debug   | Out-Null
-          New-Item -ItemType Directory -Force output/Windows/x64-Release | Out-Null
-          New-Item -ItemType Directory -Force output/Windows/ARM64-Debug   | Out-Null
-          New-Item -ItemType Directory -Force output/Windows/ARM64-Release | Out-Null
+          New-Item -ItemType Directory -Force output/Windows/Debug_x64     | Out-Null
+          New-Item -ItemType Directory -Force output/Windows/Release_x64   | Out-Null
+          New-Item -ItemType Directory -Force output/Windows/Debug_ARM64   | Out-Null
+          New-Item -ItemType Directory -Force output/Windows/Release_ARM64 | Out-Null
 
-          Copy-Item "downloaded/x64-Debug/*"     "output/Windows/x64-Debug/"     -Force
-          Copy-Item "downloaded/x64-Release/*"   "output/Windows/x64-Release/"   -Force
-          Copy-Item "downloaded/ARM64-Debug/*"   "output/Windows/ARM64-Debug/"   -Force
-          Copy-Item "downloaded/ARM64-Release/*" "output/Windows/ARM64-Release/" -Force
+          Copy-Item "downloaded/x64-Debug/*"     "output/Windows/Debug_x64/"     -Force
+          Copy-Item "downloaded/x64-Release/*"   "output/Windows/Release_x64/"   -Force
+          Copy-Item "downloaded/ARM64-Debug/*"   "output/Windows/Debug_ARM64/"   -Force
+          Copy-Item "downloaded/ARM64-Release/*" "output/Windows/Release_ARM64/" -Force
+
+      - name: Show assembled output
+        shell: pwsh
+        run: |
+          Get-ChildItem output/Windows -Recurse
 
       - name: Pack NuGet
         shell: pwsh
@@ -116,5 +119,5 @@ jobs:
         shell: pwsh
         run: |
           Get-ChildItem pkg -Filter *.nupkg | ForEach-Object {
-            nuget push $_.FullName -Source github -SkipDuplicate -ApiKey "${{ github.token }}"
+              nuget push $_.FullName -Source github -SkipDuplicate -ApiKey "${{ github.token }}"
           }
