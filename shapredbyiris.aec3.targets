@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <AEC3PackageRoot>$(MSBuildThisFileDirectory)..\..\lib\native\</AEC3PackageRoot>
+    <AEC3Arch Condition="'$(Platform)' == 'x64'">x64</AEC3Arch>
+    <AEC3Arch Condition="'$(Platform)' == 'ARM64'">ARM64</AEC3Arch>
+    <AEC3LibDir>$(AEC3PackageRoot)$(AEC3Arch)-$(Configuration)</AEC3LibDir>
+  </PropertyGroup>
+
+  <Target Name="AEC3ValidatePlatform" BeforeTargets="Link"
+          Condition="'$(AEC3Arch)' == ''">
+    <Error Text="shapedbyiris.aec3: unsupported Platform '$(Platform)'. Supported platforms: x64, ARM64." />
+  </Target>
+
+  <Target Name="AEC3ValidateLibs" BeforeTargets="Link">
+    <Error Condition="!Exists('$(AEC3LibDir)\AEC3.lib')"
+           Text="shapedbyiris.aec3: missing native library for $(Platform) / $(Configuration) at $(AEC3LibDir)." />
+  </Target>
+
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalLibraryDirectories>$(AEC3LibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>AEC3.lib;base.lib;api.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+
+</Project>
