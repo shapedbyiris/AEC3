@@ -27,29 +27,24 @@ jobs:
           vs-version: '17.14'
 
       - name: Configure CMake
-        run: >
-          cmake
-          -B build/${{ matrix.arch }}/${{ matrix.config }}
-          -G "Visual Studio 17 2022"
-          -A ${{ matrix.arch }}
+        run: cmake -B build/${{ matrix.arch }} -G "Visual Studio 17 2022" -A ${{ matrix.arch }}
 
       - name: Build
-        run: >
-          cmake
-          --build build/${{ matrix.arch }}/${{ matrix.config }}
-          --config ${{ matrix.config }}
+        run: cmake --build build/${{ matrix.arch }} --config ${{ matrix.config }}
 
       - name: Stage package files
         shell: pwsh
         run: |
+          $binDir = "build/${{ matrix.arch }}/${{ matrix.config }}"
           $outDir = "artifacts/${{ matrix.arch }}-${{ matrix.config }}"
+
           New-Item -ItemType Directory -Force $outDir | Out-Null
 
-          Copy-Item "build/${{ matrix.arch }}/${{ matrix.config }}/${{ matrix.config }}/AEC3.lib" "$outDir/" -ErrorAction Stop
-          Copy-Item "build/${{ matrix.arch }}/${{ matrix.config }}/${{ matrix.config }}/base.lib" "$outDir/" -ErrorAction Stop
-          Copy-Item "build/${{ matrix.arch }}/${{ matrix.config }}/${{ matrix.config }}/api.lib" "$outDir/" -ErrorAction Stop
+          Copy-Item "$binDir/AEC3.lib" $outDir -ErrorAction Stop
+          Copy-Item "$binDir/base.lib" $outDir -ErrorAction Stop
+          Copy-Item "$binDir/api.lib"  $outDir -ErrorAction Stop
 
-          Get-ChildItem "build/${{ matrix.arch }}/${{ matrix.config }}/${{ matrix.config }}" -Filter *.pdb -ErrorAction SilentlyContinue |
+          Get-ChildItem $binDir -Filter *.pdb -ErrorAction SilentlyContinue |
             Copy-Item -Destination $outDir -Force
 
       - name: Upload artifact
