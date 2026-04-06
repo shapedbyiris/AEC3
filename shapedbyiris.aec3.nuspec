@@ -8,36 +8,45 @@
     <projectUrl>https://github.com/shapedbyiris/AEC3</projectUrl>
     <license type="expression">BSD-3-Clause</license>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <tags>native, eac3, audio, c++, cpp</tags>
+    <tags>native, aec3, audio, c++, cpp</tags>
     <repository type="git" url="https://github.com/shapedbyiris/AEC3" />
     <dependencies>
       <group targetFramework="native0.0" />
     </dependencies>
   </metadata>
+
   <files>
-    <file src="**/*.h" exclude="android/**;demo/**" target="lib/native/include" />
+    <file src="**/*.h" exclude="android/**;demo/**;**/demo/**" target="lib/native/include" />
     <!-- x64 Release -->
-    <file src="output/Windows/x64-Release/AEC3.lib" target="lib/native/x64-Release" />
-    <file src="output/Windows/x64-Release/base.lib" target="lib/native/x64-Release" />
-    <file src="output/Windows/x64-Release/api.lib"  target="lib/native/x64-Release" />
-    <file src="output/Windows/x64-Release/*.pdb"    target="lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/AEC3.lib" target="lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/base.lib" target="lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/api.lib"  target="lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/AEC3.pdb" target="lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/base.pdb" target="lib/native/x64-Release" />
+    <file src="output/Windows/Release_x64/api.pdb"  target="lib/native/x64-Release" />
     <!-- x64 Debug -->
-    <file src="output/Windows/x64-Debug/AEC3.lib" target="lib/native/x64-Debug" />
-    <file src="output/Windows/x64-Debug/base.lib" target="lib/native/x64-Debug" />
-    <file src="output/Windows/x64-Debug/api.lib"  target="lib/native/x64-Debug" />
-    <file src="output/Windows/x64-Debug/*.pdb"    target="lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/AEC3.lib" target="lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/base.lib" target="lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/api.lib"  target="lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/AEC3.pdb" target="lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/base.pdb" target="lib/native/x64-Debug" />
+    <file src="output/Windows/Debug_x64/api.pdb"  target="lib/native/x64-Debug" />
     <!-- ARM64 Release -->
-    <file src="output/Windows/ARM64-Release/AEC3.lib" target="lib/native/ARM64-Release" />
-    <file src="output/Windows/ARM64-Release/base.lib" target="lib/native/ARM64-Release" />
-    <file src="output/Windows/ARM64-Release/api.lib"  target="lib/native/ARM64-Release" />
-    <file src="output/Windows/ARM64-Release/*.pdb"    target="lib/native/ARM64-Release" />
+    <file src="output/Windows/Release_ARM64/AEC3.lib" target="lib/native/ARM64-Release" />
+    <file src="output/Windows/Release_ARM64/base.lib" target="lib/native/ARM64-Release" />
+    <file src="output/Windows/Release_ARM64/api.lib"  target="lib/native/ARM64-Release" />
+    <file src="output/Windows/Release_ARM64/AEC3.pdb" target="lib/native/ARM64-Release" />
+    <file src="output/Windows/Release_ARM64/base.pdb" target="lib/native/ARM64-Release" />
+    <file src="output/Windows/Release_ARM64/api.pdb"  target="lib/native/ARM64-Release" />
     <!-- ARM64 Debug -->
-    <file src="output/Windows/ARM64-Debug/AEC3.lib" target="lib/native/ARM64-Debug" />
-    <file src="output/Windows/ARM64-Debug/base.lib" target="lib/native/ARM64-Debug" />
-    <file src="output/Windows/ARM64-Debug/api.lib"  target="lib/native/ARM64-Debug" />
-    <file src="output/Windows/ARM64-Debug/*.pdb"    target="lib/native/ARM64-Debug" />
+    <file src="output/Windows/Debug_ARM64/AEC3.lib" target="lib/native/ARM64-Debug" />
+    <file src="output/Windows/Debug_ARM64/base.lib" target="lib/native/ARM64-Debug" />
+    <file src="output/Windows/Debug_ARM64/api.lib"  target="lib/native/ARM64-Debug" />
+    <file src="output/Windows/Debug_ARM64/AEC3.pdb" target="lib/native/ARM64-Debug" />
+    <file src="output/Windows/Debug_ARM64/base.pdb" target="lib/native/ARM64-Debug" />
+    <file src="output/Windows/Debug_ARM64/api.pdb"  target="lib/native/ARM64-Debug" />
     <!-- Global -->
-    <file src="shapedbyiris.aec3.props"   target="build/native" />
+    <file src="shapedbyiris.aec3.props" target="build/native" />
     <file src="shapedbyiris.aec3.targets" target="build/native" />
   </files>
 </package>

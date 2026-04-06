@@ -38,6 +38,7 @@ jobs:
         shell: pwsh
         run: |
           $binDir = "output/Windows/${{ matrix.config }}_${{ matrix.arch }}"
+
           if (!(Test-Path $binDir))
           {
               throw "Expected output folder not found: $binDir"
@@ -45,11 +46,38 @@ jobs:
 
           Get-ChildItem $binDir
 
+      - name: Stage package files
+        shell: pwsh
+        run: |
+          $srcDir = "output/Windows/${{ matrix.config }}_${{ matrix.arch }}"
+          $outDir = "artifacts/${{ matrix.arch }}-${{ matrix.config }}"
+
+          New-Item -ItemType Directory -Force $outDir | Out-Null
+
+          Copy-Item "$srcDir/AEC3.lib" $outDir -ErrorAction Stop
+          Copy-Item "$srcDir/base.lib" $outDir -ErrorAction Stop
+          Copy-Item "$srcDir/api.lib"  $outDir -ErrorAction Stop
+
+          if (Test-Path "$srcDir/AEC3.pdb")
+          {
+              Copy-Item "$srcDir/AEC3.pdb" $outDir -ErrorAction Stop
+          }
+
+          if (Test-Path "$srcDir/base.pdb")
+          {
+              Copy-Item "$srcDir/base.pdb" $outDir -ErrorAction Stop
+          }
+
+          if (Test-Path "$srcDir/api.pdb")
+          {
+              Copy-Item "$srcDir/api.pdb" $outDir -ErrorAction Stop
+          }
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.arch }}-${{ matrix.config }}
-          path: output/Windows/${{ matrix.config }}_${{ matrix.arch }}
+          path: artifacts/${{ matrix.arch }}-${{ matrix.config }}
 
   pack:
     needs: build
