@@ -23,8 +23,16 @@ if(NOT CMAKE_VS_PLATFORM_NAME)
 endif()
 message("${CMAKE_VS_PLATFORM_NAME} architecture in use")
 
-if(NOT ("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64"
-     OR "${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86"))
+set(AEC3_IS_X64_FAMILY FALSE)
+set(AEC3_IS_X86 FALSE)
+
+if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    set(AEC3_IS_X64_FAMILY TRUE)
+elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "ARM64")
+    set(AEC3_IS_X64_FAMILY TRUE)
+elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    set(AEC3_IS_X86 TRUE)
+else()
     message(FATAL_ERROR "${CMAKE_VS_PLATFORM_NAME} arch is not supported!")
 endif()
 
@@ -128,22 +136,22 @@ set(ROOT_NAMESPACE rtc_base)
 ################################################################################
 # Output directory
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
         OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
         OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
     )
 endif()
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INTERPROCEDURAL_OPTIMIZATION_RELEASE "TRUE"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INTERPROCEDURAL_OPTIMIZATION_RELEASE "TRUE"
     )
@@ -151,14 +159,14 @@ endif()
 ################################################################################
 # Include directories
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     target_include_directories(${PROJECT_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/.;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base/abseil;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base/jsoncpp/include"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     target_include_directories(${PROJECT_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/.;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base;"
@@ -171,7 +179,7 @@ endif()
 # Compile definitions
 ################################################################################
 if (APPLE)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
                 "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -188,7 +196,7 @@ if (APPLE)
                 "WIN32_LEAN_AND_MEAN;"
                 "_MBCS"
                 )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
                 "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -207,7 +215,7 @@ if (APPLE)
                 )
     endif()
 elseif(WIN32)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
             "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -223,7 +231,7 @@ elseif(WIN32)
             "WIN32_LEAN_AND_MEAN;"
             "_MBCS"
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
             "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -246,7 +254,7 @@ endif()
 # Compile and link options
 ################################################################################
 if(MSVC)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Debug>:
                 /Od
@@ -268,7 +276,7 @@ if(MSVC)
             /wd4800;
             ${DEFAULT_CXX_EXCEPTION_HANDLING}
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Debug>:
                 /Od;
@@ -292,14 +300,14 @@ if(MSVC)
             ${DEFAULT_CXX_EXCEPTION_HANDLING}
         )
     endif()
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_link_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Release>:
                 /OPT:REF;
                 /OPT:ICF
             >
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_link_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Release>:
                 /OPT:REF;
@@ -319,11 +327,11 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 )
 
 if (WIN32)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         set(ADDITIONAL_LIBRARY_DEPENDENCIES
             "winmm"
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         set(ADDITIONAL_LIBRARY_DEPENDENCIES
             "winmm"
         )
@@ -534,22 +542,22 @@ set(ROOT_NAMESPACE AEC3)
 ################################################################################
 # Output directory
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
         OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
         OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
     )
 endif()
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INTERPROCEDURAL_OPTIMIZATION_RELEASE "TRUE"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INTERPROCEDURAL_OPTIMIZATION_RELEASE "TRUE"
     )
@@ -557,7 +565,7 @@ endif()
 ################################################################################
 # Include directories
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     target_include_directories(${PROJECT_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/.;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base;"
@@ -566,7 +574,7 @@ if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
         "${CMAKE_CURRENT_SOURCE_DIR}/audio_processing;"
         "${CMAKE_CURRENT_SOURCE_DIR}/audio_processing/aec3"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     target_include_directories(${PROJECT_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/.;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base;"
@@ -581,7 +589,7 @@ endif()
 # Compile definitions
 ################################################################################
 if (APPLE)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
                 "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -598,7 +606,7 @@ if (APPLE)
                 "WIN32_LEAN_AND_MEAN;"
                 "_MBCS"
                 )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
                 "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -617,7 +625,7 @@ if (APPLE)
                 )
     endif()
 elseif(WIN32)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
             "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -633,7 +641,7 @@ elseif(WIN32)
             "WIN32_LEAN_AND_MEAN;"
             "_MBCS"
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
             "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -656,7 +664,7 @@ endif()
 # Compile and link options
 ################################################################################
 if(MSVC)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Debug>:
                 /Gm-;
@@ -680,7 +688,7 @@ if(MSVC)
             /wd4800;
             ${DEFAULT_CXX_EXCEPTION_HANDLING}
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Debug>:
                 /Gm;
@@ -706,14 +714,14 @@ if(MSVC)
             ${DEFAULT_CXX_EXCEPTION_HANDLING}
         )
     endif()
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_link_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Release>:
                 /OPT:REF;
                 /OPT:ICF
             >
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_link_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Release>:
                 /OPT:REF;
@@ -929,22 +937,22 @@ set(ROOT_NAMESPACE rtc_base)
 ################################################################################
 # Output directory
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
         OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
         OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
     )
 endif()
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INTERPROCEDURAL_OPTIMIZATION_RELEASE "TRUE"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INTERPROCEDURAL_OPTIMIZATION_RELEASE "TRUE"
     )
@@ -952,14 +960,14 @@ endif()
 ################################################################################
 # Include directories
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     target_include_directories(${PROJECT_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/.;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base/abseil;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base/jsoncpp/include"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     target_include_directories(${PROJECT_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/.;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base;"
@@ -972,7 +980,7 @@ endif()
 # Compile definitions
 ################################################################################
 if (APPLE)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
                 "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -989,7 +997,7 @@ if (APPLE)
                 "WIN32_LEAN_AND_MEAN;"
                 "_MBCS"
                 )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
                 "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -1008,7 +1016,7 @@ if (APPLE)
                 )
     endif()
 elseif(WIN32)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
             "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -1024,7 +1032,7 @@ elseif(WIN32)
             "WIN32_LEAN_AND_MEAN;"
             "_MBCS"
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
             "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -1047,7 +1055,7 @@ endif()
 # Compile and link options
 ################################################################################
 if(MSVC)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Debug>:
                 /Od
@@ -1069,7 +1077,7 @@ if(MSVC)
             /wd4800;
             ${DEFAULT_CXX_EXCEPTION_HANDLING}
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Debug>:
                 /Od;
@@ -1093,14 +1101,14 @@ if(MSVC)
             ${DEFAULT_CXX_EXCEPTION_HANDLING}
         )
     endif()
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_link_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Release>:
                 /OPT:REF;
                 /OPT:ICF
             >
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_link_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Release>:
                 /OPT:REF;
@@ -1167,22 +1175,22 @@ set(ROOT_NAMESPACE rtc_base)
 ################################################################################
 # Output directory
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
         OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         OUTPUT_DIRECTORY_DEBUG   "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
         OUTPUT_DIRECTORY_RELEASE "${CMAKE_SOURCE_DIR}/output/${CMAKE_SYSTEM_NAME}/$<CONFIG>_${CMAKE_VS_PLATFORM_NAME}/"
     )
 endif()
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INTERPROCEDURAL_OPTIMIZATION_RELEASE "TRUE"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     set_target_properties(${PROJECT_NAME} PROPERTIES
         INTERPROCEDURAL_OPTIMIZATION_RELEASE "TRUE"
     )
@@ -1190,14 +1198,14 @@ endif()
 ################################################################################
 # Include directories
 ################################################################################
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     target_include_directories(${PROJECT_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/.;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base/abseil;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base/jsoncpp/include"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     target_include_directories(${PROJECT_NAME} PUBLIC
         "${CMAKE_CURRENT_SOURCE_DIR}/.;"
         "${CMAKE_CURRENT_SOURCE_DIR}/base;"
@@ -1210,7 +1218,7 @@ endif()
 # Compile definitions
 ################################################################################
 if (APPLE)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
                 "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -1227,7 +1235,7 @@ if (APPLE)
                 "WIN32_LEAN_AND_MEAN;"
                 "_MBCS"
                 )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
                 "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -1246,7 +1254,7 @@ if (APPLE)
                 )
     endif()
 elseif(WIN32)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
             "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -1262,7 +1270,7 @@ elseif(WIN32)
             "WIN32_LEAN_AND_MEAN;"
             "_MBCS"
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_definitions(${PROJECT_NAME} PRIVATE
             "$<$<CONFIG:Debug>:"
                 "_DEBUG"
@@ -1285,7 +1293,7 @@ endif()
 # Compile and link options
 ################################################################################
 if(MSVC)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_compile_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Debug>:
                 /Od
@@ -1307,7 +1315,7 @@ if(MSVC)
             /wd4800;
             ${DEFAULT_CXX_EXCEPTION_HANDLING}
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_compile_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Debug>:
                 /Od;
@@ -1331,7 +1339,7 @@ if(MSVC)
             ${DEFAULT_CXX_EXCEPTION_HANDLING}
         )
     endif()
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         target_link_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Release>:
                 /OPT:REF;
@@ -1339,7 +1347,7 @@ if(MSVC)
             >
             /DEBUG:FULL
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         target_link_options(${PROJECT_NAME} PRIVATE
             $<$<CONFIG:Release>:
                 /OPT:REF;
@@ -1361,11 +1369,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 if (WIN32)
-    if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+    if(AEC3_IS_X64_FAMILY)
         set(ADDITIONAL_LIBRARY_DEPENDENCIES
             "winmm"
         )
-    elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+    elseif(AEC3_IS_X86)
         set(ADDITIONAL_LIBRARY_DEPENDENCIES
             "winmm"
         )
@@ -1373,11 +1381,11 @@ if (WIN32)
 endif()
 target_link_libraries(${PROJECT_NAME} PRIVATE "${ADDITIONAL_LIBRARY_DEPENDENCIES}")
 
-if("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x64")
+if(AEC3_IS_X64_FAMILY)
     target_link_directories(${PROJECT_NAME} PRIVATE
         "${OUTPUT_DIRECTORY}"
     )
-elseif("${CMAKE_VS_PLATFORM_NAME}" STREQUAL "x86")
+elseif(AEC3_IS_X86)
     target_link_directories(${PROJECT_NAME} PRIVATE
         "${OUTPUT_DIRECTORY}"
     )
